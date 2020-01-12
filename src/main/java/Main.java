@@ -5,15 +5,20 @@ public class Main {
         String url = "jdbc:mysql://localhost:3306/skillbox?serverTimezone=UTC";
         String user = "root";
         String password = "58598532";
+        String SqlQuery = "SELECT   EXTRACT(MONTH FROM subscription_date) AS month," +
+                                   "COUNT(student_name) AS purchases " +
+                          "FROM     PurchaseList " +
+                          "GROUP BY EXTRACT(MONTH FROM subscription_date) " +
+                          "ORDER BY month;";
         try {
             Connection connection = DriverManager.getConnection(url,user,password);
             Statement statement = connection.createStatement();
-//            statement.execute("UPDATE Courses SET name = 'Веб-разработчик с 0 до PRO' WHERE id = '1'");
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Courses");
+            ResultSet resultSet = statement.executeQuery(SqlQuery);
             while (resultSet.next())
             {
-                String courseName = resultSet.getString("name");
-                System.out.println(courseName);
+                String month = resultSet.getString("month");
+                String purchases = resultSet.getString("purchases");
+                System.out.println(month + " - " + purchases);
             }
             resultSet.close();
             statement.close();
